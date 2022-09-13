@@ -11,7 +11,7 @@ public class Random {
             max = 20;
             min = 5;
 
-        } else{
+        } else {
             max = 1;
             min = 0;
         }
@@ -20,13 +20,10 @@ public class Random {
         return (int) ((Math.random() * ++max) + min);
     }
 
-    public static int desiredAndCurrentFloor(int maxFloor){
-        int min = 0;
-        return (int) ((Math.random() * ++maxFloor) + min);
+    public static int desiredAndCurrentFloor(int maxFloor) {
+        int min = 1;
+        return (int) ((Math.random() * (++maxFloor - min)) + min);
     }
 
-    public static String upOrDown(){
-        String [] upAndDownArr = {"up", "down"};
-        return upAndDownArr[(int) ((Math.random() * 2) + 0)];
-    }
+
 }

@@ -44,10 +44,9 @@ public class Floor {
 
     @Override
     public String toString() {
-        return "Floor{" +
-                "numberOfPassengers=" + numberOfPassengers +
-                ", passengers=" + passengers +
-                ", number=" + number +
-                '}';
+        return "Floor №" + this.number +
+                "\nNumber of passengers = " + this.numberOfPassengers +
+                "\nPassengers:" + this.passengers +
+                "\nSizeArrList = " + this.passengers.size();
     }
 }

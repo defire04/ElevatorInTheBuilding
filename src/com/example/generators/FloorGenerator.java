@@ -11,12 +11,13 @@ public class FloorGenerator {
 
     public static List<Floor> create() {
         int countOfFloors = Random.randomNumberOf("countOfFloors");
+        int numberOfPassengers;
         List<Floor> floorList = new ArrayList<>();
 
         System.out.println(countOfFloors);
         for (int i = 0; i < countOfFloors; i++) {
-
-            floorList.add(new Floor(Random.randomNumberOf("numberOfPassengers"), PassengerGenerator.create(countOfFloors), i + 1));
+            numberOfPassengers = Random.randomNumberOf("numberOfPassengers");
+            floorList.add(new Floor(numberOfPassengers, PassengerGenerator.create(countOfFloors, numberOfPassengers, i+1), i + 1));
         }
 
 
