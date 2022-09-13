@@ -14,7 +14,6 @@ public class FloorGenerator {
         int numberOfPassengers;
         List<Floor> floorList = new ArrayList<>();
 
-        System.out.println(countOfFloors);
         for (int i = 0; i < countOfFloors; i++) {
             numberOfPassengers = Random.randomNumberOf("numberOfPassengers");
             floorList.add(new Floor(numberOfPassengers, PassengerGenerator.create(countOfFloors, numberOfPassengers, i+1), i + 1));

@@ -1,18 +1,27 @@
 package com.example.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Elevator {
     public static final int MAXIMUM_CAPACITY = 5;
     private String direction;
     private int placesLeft;
 
-    private int floorThatTheElevatorGoesTo;
+    private int headingTowards;
+    private int currentFloor;
+
+    private int nearestStop;
+
+    private final List<Passenger> passengersInElevator = new ArrayList<>();
 
     public Elevator() {
     }
 
-    public Elevator(String direction, int placesLeft) {
+    public Elevator(String direction, int currentFloor) {
         this.direction = direction;
-        this.placesLeft = placesLeft;
+        this.currentFloor = currentFloor;
+        this.placesLeft = MAXIMUM_CAPACITY;
     }
 
     public String getDirection() {
@@ -31,11 +40,31 @@ public class Elevator {
         this.placesLeft = placesLeft;
     }
 
-    public int getFloorThatTheElevatorGoesTo() {
-        return floorThatTheElevatorGoesTo;
+    public int getHeadingTowards() {
+        return headingTowards;
     }
 
-    public void setFloorThatTheElevatorGoesTo(int floorThatTheElevatorGoesTo) {
-        this.floorThatTheElevatorGoesTo = floorThatTheElevatorGoesTo;
+    public void setHeadingTowards(int headingTowards) {
+        this.headingTowards = headingTowards;
+    }
+
+    public int getCurrentFloor() {
+        return currentFloor;
+    }
+
+    public void setCurrentFloor(int currentFloor) {
+        this.currentFloor = currentFloor;
+    }
+
+    public int getNearestStop() {
+        return nearestStop;
+    }
+
+    public void setNearestStop(int nearestStop) {
+        this.nearestStop = nearestStop;
+    }
+
+    public List<Passenger> getPassengersInElevator() {
+        return passengersInElevator;
     }
 }

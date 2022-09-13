@@ -1,6 +1,8 @@
 package com.example.models;
 
-public class Passenger {
+import java.util.Comparator;
+
+public class Passenger implements Comparator {
     private int desiredFloor;
     private int currentFloor;
 
@@ -13,6 +15,10 @@ public class Passenger {
         this.desiredFloor = desiredFloor;
         this.currentFloor = currentFloor;
         this.direction = direction;
+    }
+
+    public Passenger(int desiredFloor) {
+        this.desiredFloor = desiredFloor;
     }
 
     public int getDesiredFloor() {
@@ -31,6 +37,14 @@ public class Passenger {
         this.currentFloor = currentFloor;
     }
 
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
+    }
+
     @Override
     public String toString() {
         return "Passenger{" +
@@ -38,5 +52,10 @@ public class Passenger {
                 ", currentFloor=" + currentFloor +
                 ", direction='" + direction + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compare(Object o1, Object o2) {
+        return ((Passenger) o1).desiredFloor - ((Passenger) o2).desiredFloor;
     }
 }
