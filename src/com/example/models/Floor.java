@@ -7,12 +7,15 @@ public class Floor {
 
     private List<Passenger> passengers;
 
+    private int number;
+
     public Floor() {
     }
 
-    public Floor(int numberOfPassengers, List<Passenger> passengers) {
+    public Floor(int numberOfPassengers, List<Passenger> passengers, int number) {
         this.numberOfPassengers = numberOfPassengers;
         this.passengers = passengers;
+        this.number = number;
     }
 
     public int getNumberOfPassengers() {
@@ -29,5 +32,22 @@ public class Floor {
 
     public void setPassengers(List<Passenger> passengers) {
         this.passengers = passengers;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    @Override
+    public String toString() {
+        return "Floor{" +
+                "numberOfPassengers=" + numberOfPassengers +
+                ", passengers=" + passengers +
+                ", number=" + number +
+                '}';
     }
 }

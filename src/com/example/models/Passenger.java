@@ -4,12 +4,15 @@ public class Passenger {
     private int desiredFloor;
     private int currentFloor;
 
+    private String direction;
+
     public Passenger() {
     }
 
-    public Passenger(int desiredFloor, int currentFloor) {
+    public Passenger(int desiredFloor, int currentFloor, String direction) {
         this.desiredFloor = desiredFloor;
         this.currentFloor = currentFloor;
+        this.direction = direction;
     }
 
     public int getDesiredFloor() {
@@ -26,5 +29,14 @@ public class Passenger {
 
     public void setCurrentFloor(int currentFloor) {
         this.currentFloor = currentFloor;
+    }
+
+    @Override
+    public String toString() {
+        return "Passenger{" +
+                "desiredFloor=" + desiredFloor +
+                ", currentFloor=" + currentFloor +
+                ", direction='" + direction + '\'' +
+                '}';
     }
 }
