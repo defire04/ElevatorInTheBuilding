@@ -28,11 +28,27 @@ public class ElevatorController {
 
         int tempPlacesLeft;
         Floor currentFloor;
+        int bb = 0;
+        while (bb < 3) {
+            currentFloor = building.get(elevator.getCurrentFloor() - 1);
 
-        while (true) {
-            currentFloor = building.get(elevator.getCurrentFloor());
+
+            // ----------------------------------- Выгрузка  людей из лифта --------------------------
+
+            List<Passenger> tempList = elevator.getPassengersInElevator();
+            for (Passenger passengerInElevator : tempList) {
+                if (passengerInElevator.getDesiredFloor() == elevator.getCurrentFloor()) {
+
+                    currentFloor.getPassengers().add(passengerInElevator);            // выгрузка на этаж
+                    elevator.getPassengersInElevator().remove(passengerInElevator);   // выгрузка из лифта
+                    elevator.setPlacesLeft(elevator.getPlacesLeft() + 1);
+                    passengerInElevator.setCurrentFloor(elevator.getCurrentFloor());
+
+                }
+            }
 
 
+            // -------------------------------------------------------------
             if (elevator.getDirection().equals("up")) {
                 if (currentFloor.getPassengers().isEmpty()) {
                     elevator.setCurrentFloor(elevator.getCurrentFloor() + 1);
@@ -47,23 +63,28 @@ public class ElevatorController {
 
 
             // ----------------------------------- Загрузка людей в лифт --------------------------
-            findWhereDoesElevatorLead(currentFloor, elevator);                                   // Ищем куда идет лифт
+            findWhereDoesElevatorLead(currentFloor, elevator);                                     // Ищем куда идет лифт
 
             List<Passenger> passengersOnFloorWhoAreTravelingInDirectionOfTheElevator = currentFloor.getPassengers().stream().filter(p -> p.getDirection()
-                    .equals(elevator.getDirection())).toList();                                  //пассажиры на этаже которые едут в направление лифта
+                    .equals(elevator.getDirection())).toList();                                    //пассажиры на этаже которые едут в направление лифта
 
 
             for (int i = 0; i < passengersOnFloorWhoAreTravelingInDirectionOfTheElevator.size(); i++) {
                 if (elevator.getPlacesLeft() != 0) {                                               // ищем сколько мест останется
-                    elevator.getPassengersInElevator().add(currentFloor.getPassengers().get(i)); // в лифт сел
-                    currentFloor.getPassengers().remove(currentFloor.getPassengers().get(i));    // из этажа удалали человека
+                    elevator.getPassengersInElevator().add(currentFloor.getPassengers().get(i));   // в лифт сел !!!!!!!!!!!!!!
+                    currentFloor.getPassengers().remove(currentFloor.getPassengers().get(i));      // из этажа удалали человека
+                    currentFloor.setNumberOfPassengers(currentFloor.getNumber() - 1);
                     elevator.setPlacesLeft(Elevator.MAXIMUM_CAPACITY - 1);
                 } else {
                     continue;
                 }
             }
 
+            bb++;
 
+            System.out.println("------------================================= Step" + bb + "=================================------------ ");
+            System.out.println(currentFloor);
+            System.out.println(elevator);
         }
     }
 

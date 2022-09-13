@@ -2,7 +2,7 @@ package com.example.models;
 
 import java.util.Comparator;
 
-public class Passenger implements Comparator {
+public class Passenger implements Comparator<Passenger> {
     private int desiredFloor;
     private int currentFloor;
 
@@ -55,7 +55,7 @@ public class Passenger implements Comparator {
     }
 
     @Override
-    public int compare(Object o1, Object o2) {
-        return ((Passenger) o1).desiredFloor - ((Passenger) o2).desiredFloor;
+    public int compare(Passenger o1, Passenger o2) {
+        return  o1.desiredFloor -  o2.desiredFloor;
     }
 }

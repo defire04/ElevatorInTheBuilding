@@ -14,11 +14,16 @@ public class Main {
     public static void main(String[] args) {
         List<Floor> a = FloorGenerator.create();
 
-
         a.forEach(System.out::println);
+        System.out.println("=========================");
+        ElevatorController.operation(a);
+
+
+
+
 //        System.out.println(a.size());
 
-        ElevatorController.operation(a);
+
 //        System.out.println(a.get(0));
 //        System.out.println("--------------");
 

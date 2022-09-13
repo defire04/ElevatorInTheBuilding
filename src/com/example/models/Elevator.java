@@ -67,4 +67,15 @@ public class Elevator {
     public List<Passenger> getPassengersInElevator() {
         return passengersInElevator;
     }
+
+    @Override
+    public String toString() {
+        return "-------------Elevator---------------" +
+                "\nCurrentFloor " + this.currentFloor +
+                "\nPlacesLeft " + this.placesLeft +
+                "\nPassengersInElevator: " + this.passengersInElevator +
+                "\nSize: " + this.passengersInElevator.size() +
+                "\nHeadingTowards: " + this.headingTowards +
+                "\nDirection: " + this.direction;
+    }
 }
