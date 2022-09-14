@@ -35,4 +35,23 @@ public class PassengerGenerator {
 
         return passengers;
     }
+
+
+    public static void overrideDesiredFloor(Passenger passenger, int currentFloor, int maxFloor) {
+        passenger.setCurrentFloor(currentFloor);
+        int desiredFloor = Random.desiredAndCurrentFloor(maxFloor);
+        passenger.setDesiredFloor(desiredFloor);
+        if (currentFloor == 1) {
+            passenger.setDirection(Direction.UP);
+        } else if (currentFloor == maxFloor) {
+            passenger.setDirection(Direction.DOWN);
+        } else {
+            if (currentFloor - desiredFloor > 0) {
+                passenger.setDirection(Direction.DOWN);
+            } else {
+                passenger.setDirection(Direction.UP);
+            }
+        }
+    }
+
 }

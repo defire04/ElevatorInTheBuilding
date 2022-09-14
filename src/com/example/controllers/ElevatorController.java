@@ -1,6 +1,7 @@
 package com.example.controllers;
 
 import com.example.enums.Direction;
+import com.example.generators.PassengerGenerator;
 import com.example.models.Elevator;
 import com.example.models.Floor;
 import com.example.models.Passenger;
@@ -14,14 +15,15 @@ public class ElevatorController {
 
         Elevator elevator = new Elevator(1);
 
-        List<Direction> forStop = new ArrayList<>();
 
-        int step = 0;
         while (true) {
-            step++;
 
+            System.out.println(elevator.getCurrentFloor());
+            System.out.println(elevator.getDirection());
 
             Floor currentFloor = building.get(elevator.getCurrentFloor() - 1);
+
+
 
 //            System.out.println("------------================================= Step " + (step) + "=================================------------ ");
 //            System.out.println(currentFloor);
@@ -33,7 +35,7 @@ public class ElevatorController {
 
                 if (building.stream().anyMatch(floor -> !(floor.getPassengers().isEmpty()))) {
                     elevator.setCurrentFloor(building.stream().filter(floor -> !(floor.getPassengers().isEmpty())).toList().get(0).getNumber());
-                } else{
+                } else {
                     return;
                 }
             }
@@ -47,7 +49,8 @@ public class ElevatorController {
             }
 
             if (elevator.getPassengersInElevator().stream().anyMatch(p -> p.getDesiredFloor() == currentFloor.getNumber())) {
-                unloadingPassengerFromTheElevator(currentFloor, elevator);
+                unloadingPassengerFromTheElevator(currentFloor, elevator, building.size());
+
             }
 
             if (elevator.getPassengersInElevator().isEmpty() && currentFloor.getPassengers().stream().noneMatch(p -> p.getDirection() == elevator.getDirection())) {
@@ -63,17 +66,21 @@ public class ElevatorController {
         }
     }
 
-    private static void unloadingPassengerFromTheElevator(Floor currentFloor, Elevator elevator) {
+    private static void unloadingPassengerFromTheElevator(Floor currentFloor, Elevator elevator, int maxFloor) {
 
         List<Passenger> removeList = new ArrayList<>();
 
         for (Passenger passenger : elevator.getPassengersInElevator()) {
             if (passenger.getDesiredFloor() == currentFloor.getNumber()) {
                 removeList.add(passenger);
+
+
+//                currentFloor.getPassengers().add(passenger);  // для выполнения условия задание что людям которые прибыли на этаж переопределить желаемый этаж
+//                PassengerGenerator.overrideDesiredFloor(passenger, currentFloor.getNumber(), maxFloor);
             }
         }
 
-        System.out.println("These people left the elevator: "  + removeList);
+        System.out.println("These people left the elevator: " + removeList);
 
         elevator.setPlacesLeft(elevator.getPlacesLeft() + removeList.size());
 
