@@ -4,20 +4,17 @@ import com.example.enums.Direction;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+
 
 public class Elevator {
     public static final int MAXIMUM_CAPACITY = 5;
     private Direction direction;
     private int placesLeft;
 
-    private int headingTowards;
     private int currentFloor;
 
     private final List<Passenger> passengersInElevator = new ArrayList<>();
 
-    private final Set<Integer> floorsWillTheElevatorGoTo = new TreeSet<>();
 
     public Elevator() {
     }
@@ -50,14 +47,6 @@ public class Elevator {
         this.placesLeft = placesLeft;
     }
 
-    public int getHeadingTowards() {
-        return headingTowards;
-    }
-
-    public void setHeadingTowards(int headingTowards) {
-        this.headingTowards = headingTowards;
-    }
-
     public int getCurrentFloor() {
         return currentFloor;
     }
@@ -70,9 +59,7 @@ public class Elevator {
         return passengersInElevator;
     }
 
-    public Set<Integer> getFloorsWillTheElevatorGoTo() {
-        return floorsWillTheElevatorGoTo;
-    }
+
 
     @Override
     public String toString() {
@@ -80,8 +67,6 @@ public class Elevator {
                 "\nCurrentFloor " + this.currentFloor +
                 "\nPlacesLeft " + this.placesLeft +
                 "\nPassengersInElevator: " + this.passengersInElevator +
-                "\nSize: " + this.passengersInElevator.size() +
-                "\nHeadingTowards: " + this.floorsWillTheElevatorGoTo +
                 "\nDirection: " + this.direction;
     }
 }

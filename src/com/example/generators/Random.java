@@ -5,14 +5,16 @@ public class Random {
         double max;
         double min;
         if (mode.equals("numberOfPassengers")) {
-//            max = 10;
-            max = 2;
+            max = 10;
+//            max = 2; FOR TESTING
             min = 0;
         } else if (mode.equals("countOfFloors")) {
-//            max = 20;
-            //min = 5
-            max = 5;
-            min = 3;
+            max = 20;
+            min = 5 ;
+
+            //FOR TESTING
+//            max = 5;
+//            min = 3;
 
         } else {
             max = 1;

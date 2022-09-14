@@ -2,9 +2,9 @@ package com.example.models;
 
 import com.example.enums.Direction;
 
-import java.util.Comparator;
 
-public class Passenger implements Comparator<Passenger> {
+
+public class Passenger {
     private int desiredFloor;
     private int currentFloor;
 
@@ -49,15 +49,7 @@ public class Passenger implements Comparator<Passenger> {
 
     @Override
     public String toString() {
-        return "Passenger{" +
-                "desiredFloor=" + desiredFloor +
-                ", currentFloor=" + currentFloor +
-                ", direction='" + direction + '\'' +
-                '}';
-    }
+        return "Passenger(Desired Floor = " + this.getDesiredFloor() + " Direction:" + this.direction + ")" + this.currentFloor;
 
-    @Override
-    public int compare(Passenger o1, Passenger o2) {
-        return  o1.desiredFloor -  o2.desiredFloor;
     }
 }

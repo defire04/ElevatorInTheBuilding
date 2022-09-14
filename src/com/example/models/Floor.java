@@ -6,7 +6,6 @@ public class Floor {
     private int numberOfPassengers;
 
     private List<Passenger> passengers;
-
     private int number;
 
     public Floor() {

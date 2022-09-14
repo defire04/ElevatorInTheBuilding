@@ -4,31 +4,40 @@ import com.example.enums.Direction;
 import com.example.models.Elevator;
 import com.example.models.Floor;
 import com.example.models.Passenger;
+import com.example.view.PrintElevatorInfo;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class ElevatorController {
-    public static void operation(List<Floor> a) {
-        List<Floor> building = a;
-
+    public static void operation(List<Floor> building) {
 
         Elevator elevator = new Elevator(1);
 
-        int ttttttt = 0;
-        while (ttttttt < 10) {
-            ttttttt++;
+        List<Direction> forStop = new ArrayList<>();
 
-            Floor currentFloor = a.get(elevator.getCurrentFloor() - 1);
+        int step = 0;
+        while (true) {
+            step++;
 
 
-            System.out.println("------------================================= Step " + (ttttttt) + "=================================------------ ");
-            System.out.println(currentFloor);
-            System.out.println(elevator);
+            Floor currentFloor = building.get(elevator.getCurrentFloor() - 1);
+
+//            System.out.println("------------================================= Step " + (step) + "=================================------------ ");
+//            System.out.println(currentFloor);
+//            System.out.println(elevator);
+            PrintElevatorInfo.print(building, elevator);
 
             if (elevator.getDirection() == Direction.WAITING) {
-                findDirection(currentFloor, elevator);              // узнали направление
+                findDirection(currentFloor, elevator);
+
+                if (building.stream().anyMatch(floor -> !(floor.getPassengers().isEmpty()))) {
+                    elevator.setCurrentFloor(building.stream().filter(floor -> !(floor.getPassengers().isEmpty())).toList().get(0).getNumber());
+                } else{
+                    return;
+                }
             }
+
 
             if (currentFloor.getPassengers().isEmpty() && elevator.getPassengersInElevator()
                     .stream().noneMatch(p -> p.getDesiredFloor() == currentFloor.getNumber())) {
@@ -38,11 +47,10 @@ public class ElevatorController {
             }
 
             if (elevator.getPassengersInElevator().stream().anyMatch(p -> p.getDesiredFloor() == currentFloor.getNumber())) {
-                System.out.println("unloadingPassengerFromTheElevator++++++++++++++++++++++++++++++++");
                 unloadingPassengerFromTheElevator(currentFloor, elevator);
             }
 
-            if(elevator.getPassengersInElevator().isEmpty() && currentFloor.getPassengers().stream().noneMatch(p-> p.getDirection() == elevator.getDirection())){
+            if (elevator.getPassengersInElevator().isEmpty() && currentFloor.getPassengers().stream().noneMatch(p -> p.getDirection() == elevator.getDirection())) {
                 findDirection(currentFloor, elevator);
             }
 
@@ -51,12 +59,8 @@ public class ElevatorController {
             }
 
 
-
-
             goInTheDirection(elevator);
         }
-
-
     }
 
     private static void unloadingPassengerFromTheElevator(Floor currentFloor, Elevator elevator) {
@@ -69,7 +73,7 @@ public class ElevatorController {
             }
         }
 
-        System.out.println(removeList);
+        System.out.println("These people left the elevator: "  + removeList);
 
         elevator.setPlacesLeft(elevator.getPlacesLeft() + removeList.size());
 
@@ -88,7 +92,7 @@ public class ElevatorController {
         }
     }
 
-    // загружаем людей
+
     private static void pickUpPeopleFromFloor(Floor currentFloor, Elevator elevator) {
 
         for (Passenger passenger : currentFloor.getPassengers()) {
@@ -108,7 +112,7 @@ public class ElevatorController {
         elevator.setPlacesLeft(Elevator.MAXIMUM_CAPACITY - elevator.getPassengersInElevator().size());
     }
 
-    private static void findDirection(Floor currentFloor, Elevator elevator) {
+    private static void findDirection(Floor currentFloor, Elevator elevator) {// выбор направления
 
         Map<Direction, Long> hashMap = currentFloor.getPassengers()
                 .stream()
@@ -126,7 +130,7 @@ public class ElevatorController {
             } else {
                 elevator.setDirection(Direction.DOWN);
             }
-        } else if(currentFloor.getNumber() == 0) {
+        } else if (currentFloor.getNumber() == 0) {
             elevator.setDirection(Direction.UP);
         } else {
             elevator.setDirection(Direction.WAITING);
