@@ -1,148 +1,135 @@
 package com.example.controllers;
 
+import com.example.enums.Direction;
 import com.example.models.Elevator;
 import com.example.models.Floor;
 import com.example.models.Passenger;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ElevatorController {
     public static void operation(List<Floor> a) {
         List<Floor> building = a;
 
-//        Elevator elevator = new Elevator("up", 1);
-//        elevator.setDirection("up");
-//        findHeadingTowards(a, elevator);
-//        System.out.println(elevator.getHeadingTowards());
-//
-//        elevator.setDirection("down");
-//        findHeadingTowards(a, elevator);
-//        System.out.println(elevator.getHeadingTowards());
 
-        Elevator elevator = new Elevator("up", 1);
+        Elevator elevator = new Elevator(1);
 
-        findHeadingTowards(a, elevator);
-        System.out.println(elevator.getHeadingTowards());
+        int ttttttt = 0;
+        while (ttttttt < 10) {
+            ttttttt++;
 
-        int tempPlacesLeft;
-        Floor currentFloor;
-        int bb = 0;
-        while (bb < 3) {
-            currentFloor = building.get(elevator.getCurrentFloor() - 1);
+            Floor currentFloor = a.get(elevator.getCurrentFloor() - 1);
 
 
-            // ----------------------------------- Выгрузка  людей из лифта --------------------------
-
-            List<Passenger> tempList = elevator.getPassengersInElevator();
-            for (Passenger passengerInElevator : tempList) {
-                if (passengerInElevator.getDesiredFloor() == elevator.getCurrentFloor()) {
-
-                    currentFloor.getPassengers().add(passengerInElevator);            // выгрузка на этаж
-                    elevator.getPassengersInElevator().remove(passengerInElevator);   // выгрузка из лифта
-                    elevator.setPlacesLeft(elevator.getPlacesLeft() + 1);
-                    passengerInElevator.setCurrentFloor(elevator.getCurrentFloor());
-
-                }
-            }
-
-
-            // -------------------------------------------------------------
-            if (elevator.getDirection().equals("up")) {
-                if (currentFloor.getPassengers().isEmpty()) {
-                    elevator.setCurrentFloor(elevator.getCurrentFloor() + 1);
-                    continue;
-                }
-            } else if (elevator.getDirection().equals("down")) {
-                if (currentFloor.getPassengers().isEmpty()) {
-                    elevator.setCurrentFloor(elevator.getCurrentFloor() - 1);
-                    continue;
-                }
-            }
-
-
-            // ----------------------------------- Загрузка людей в лифт --------------------------
-            findWhereDoesElevatorLead(currentFloor, elevator);                                     // Ищем куда идет лифт
-
-            List<Passenger> passengersOnFloorWhoAreTravelingInDirectionOfTheElevator = currentFloor.getPassengers().stream().filter(p -> p.getDirection()
-                    .equals(elevator.getDirection())).toList();                                    //пассажиры на этаже которые едут в направление лифта
-
-
-            for (int i = 0; i < passengersOnFloorWhoAreTravelingInDirectionOfTheElevator.size(); i++) {
-                if (elevator.getPlacesLeft() != 0) {                                               // ищем сколько мест останется
-                    elevator.getPassengersInElevator().add(currentFloor.getPassengers().get(i));   // в лифт сел !!!!!!!!!!!!!!
-                    currentFloor.getPassengers().remove(currentFloor.getPassengers().get(i));      // из этажа удалали человека
-                    currentFloor.setNumberOfPassengers(currentFloor.getNumber() - 1);
-                    elevator.setPlacesLeft(Elevator.MAXIMUM_CAPACITY - 1);
-                } else {
-                    continue;
-                }
-            }
-
-            bb++;
-
-            System.out.println("------------================================= Step" + bb + "=================================------------ ");
+            System.out.println("------------================================= Step " + (ttttttt) + "=================================------------ ");
             System.out.println(currentFloor);
             System.out.println(elevator);
+
+            if (elevator.getDirection() == Direction.WAITING) {
+                findDirection(currentFloor, elevator);              // узнали направление
+            }
+
+            if (currentFloor.getPassengers().isEmpty() && elevator.getPassengersInElevator()
+                    .stream().noneMatch(p -> p.getDesiredFloor() == currentFloor.getNumber())) {
+                goInTheDirection(elevator);
+
+                continue;
+            }
+
+            if (elevator.getPassengersInElevator().stream().anyMatch(p -> p.getDesiredFloor() == currentFloor.getNumber())) {
+                System.out.println("unloadingPassengerFromTheElevator++++++++++++++++++++++++++++++++");
+                unloadingPassengerFromTheElevator(currentFloor, elevator);
+            }
+
+            if(elevator.getPassengersInElevator().isEmpty() && currentFloor.getPassengers().stream().noneMatch(p-> p.getDirection() == elevator.getDirection())){
+                findDirection(currentFloor, elevator);
+            }
+
+            if (currentFloor.getPassengers().stream().anyMatch(p -> p.getDirection() == elevator.getDirection() && elevator.getPlacesLeft() > 0)) {
+                pickUpPeopleFromFloor(currentFloor, elevator);
+            }
+
+
+
+
+            goInTheDirection(elevator);
+        }
+
+
+    }
+
+    private static void unloadingPassengerFromTheElevator(Floor currentFloor, Elevator elevator) {
+
+        List<Passenger> removeList = new ArrayList<>();
+
+        for (Passenger passenger : elevator.getPassengersInElevator()) {
+            if (passenger.getDesiredFloor() == currentFloor.getNumber()) {
+                removeList.add(passenger);
+            }
+        }
+
+        System.out.println(removeList);
+
+        elevator.setPlacesLeft(elevator.getPlacesLeft() + removeList.size());
+
+        removeList.forEach(passenger -> {
+            elevator.getPassengersInElevator().remove(passenger);
+        });
+
+
+    }
+
+    private static void goInTheDirection(Elevator elevator) {
+        if (elevator.getDirection() == Direction.UP) {
+            elevator.setCurrentFloor(elevator.getCurrentFloor() + 1);
+        } else if (elevator.getDirection() == Direction.DOWN) {
+            elevator.setCurrentFloor(elevator.getCurrentFloor() - 1);
         }
     }
 
-    private static void findWhereDoesElevatorLead(Floor floor, Elevator elevator) {
-        List<Passenger> passengers = floor.getPassengers();
+    // загружаем людей
+    private static void pickUpPeopleFromFloor(Floor currentFloor, Elevator elevator) {
 
-
-        int headingTowardsForTop = Integer.MIN_VALUE;
-        int headingTowardsForBottom = Integer.MAX_VALUE;
-
-        int tempGetDesiredFloor;
-        elevator.setHeadingTowards(0);
-
-        if (!passengers.isEmpty()) {
-            for (Passenger passenger : passengers) {
-                tempGetDesiredFloor = passenger.getDesiredFloor();
-
-                if (elevator.getDirection().equals("up") && passenger.getDirection().equals("up")) {
-                    if (headingTowardsForTop < tempGetDesiredFloor) {
-                        headingTowardsForTop = tempGetDesiredFloor;
-                        elevator.setHeadingTowards(headingTowardsForTop);
-                    }
-                } else if (elevator.getDirection().equals("down") && passenger.getDirection().equals("down")) {
-                    if (headingTowardsForBottom > tempGetDesiredFloor) {
-                        headingTowardsForBottom = tempGetDesiredFloor;
-                        elevator.setHeadingTowards(headingTowardsForBottom);
-                    }
+        for (Passenger passenger : currentFloor.getPassengers()) {
+            if (elevator.getDirection() == passenger.getDirection()) {
+                if (elevator.getPassengersInElevator().size() < Elevator.MAXIMUM_CAPACITY) {
+                    elevator.getPassengersInElevator().add(passenger);
                 }
             }
-
         }
+
+        elevator.getPassengersInElevator().forEach(passenger -> {
+            currentFloor.getPassengers().remove(passenger);
+        });
+
+        currentFloor.setNumberOfPassengers(currentFloor.getPassengers().size());
+
+        elevator.setPlacesLeft(Elevator.MAXIMUM_CAPACITY - elevator.getPassengersInElevator().size());
     }
 
-    private static void findHeadingTowards(List<Floor> building, Elevator elevator) {
+    private static void findDirection(Floor currentFloor, Elevator elevator) {
 
-        System.out.println(elevator.getDirection());
-        int headingTowardsForTop = Integer.MIN_VALUE;
-        int headingTowardsForBottom = Integer.MAX_VALUE;
+        Map<Direction, Long> hashMap = currentFloor.getPassengers()
+                .stream()
+                .collect(Collectors
+                        .groupingBy(Passenger::getDirection, Collectors.counting()));
 
-        int tempGetDesiredFloor;
-        elevator.setHeadingTowards(0);
-
-        for (Floor floor : building) {
-            for (Passenger passenger : floor.getPassengers()) {
-                tempGetDesiredFloor = passenger.getDesiredFloor();
-
-                if (elevator.getDirection().equals("up") && passenger.getDirection().equals("up")) {
-                    if (headingTowardsForTop < tempGetDesiredFloor) {
-                        headingTowardsForTop = tempGetDesiredFloor;
-                        elevator.setHeadingTowards(headingTowardsForTop);
-                    }
-                } else if (elevator.getDirection().equals("down") && passenger.getDirection().equals("down")) {
-                    if (headingTowardsForBottom > tempGetDesiredFloor) {
-                        headingTowardsForBottom = tempGetDesiredFloor;
-                        elevator.setHeadingTowards(headingTowardsForBottom);
-                    }
-                }
+        Set<Direction> set = hashMap.keySet();
+        if (set.size() == 1) {
+            for (Direction direction : set) {
+                elevator.setDirection(direction);
             }
+        } else if (set.size() == 2) {
+            if (hashMap.get(Direction.UP) >= hashMap.get(Direction.DOWN)) {
+                elevator.setDirection(Direction.UP);
+            } else {
+                elevator.setDirection(Direction.DOWN);
+            }
+        } else if(currentFloor.getNumber() == 0) {
+            elevator.setDirection(Direction.UP);
+        } else {
+            elevator.setDirection(Direction.WAITING);
         }
     }
 }

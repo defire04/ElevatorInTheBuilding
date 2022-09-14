@@ -1,5 +1,6 @@
 package com.example.generators;
 
+import com.example.enums.Direction;
 import com.example.models.Passenger;
 
 import java.util.ArrayList;
@@ -19,15 +20,15 @@ public class PassengerGenerator {
 
             if (currentFloor == 1) {
                 passengers.add(new Passenger(desiredFloor, currentFloor,
-                        "up"));
+                        Direction.UP));
             } else if (currentFloor == maxFloor) {
                 passengers.add(new Passenger(desiredFloor, currentFloor,
-                        "down"));
+                        Direction.DOWN));
             } else {
                 if (currentFloor - desiredFloor > 0) {
-                    passengers.add(new Passenger(desiredFloor, currentFloor, "down"));
+                    passengers.add(new Passenger(desiredFloor, currentFloor, Direction.DOWN));
                 } else {
-                    passengers.add(new Passenger(desiredFloor, currentFloor, "up"));
+                    passengers.add(new Passenger(desiredFloor, currentFloor, Direction.UP));
                 }
             }
         }

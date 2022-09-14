@@ -1,34 +1,44 @@
 package com.example.models;
 
+import com.example.enums.Direction;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Elevator {
     public static final int MAXIMUM_CAPACITY = 5;
-    private String direction;
+    private Direction direction;
     private int placesLeft;
 
     private int headingTowards;
     private int currentFloor;
 
-    private int nearestStop;
-
     private final List<Passenger> passengersInElevator = new ArrayList<>();
+
+    private final Set<Integer> floorsWillTheElevatorGoTo = new TreeSet<>();
 
     public Elevator() {
     }
 
-    public Elevator(String direction, int currentFloor) {
+    public Elevator(Direction direction, int currentFloor) {
         this.direction = direction;
         this.currentFloor = currentFloor;
         this.placesLeft = MAXIMUM_CAPACITY;
     }
 
-    public String getDirection() {
+    public Elevator(int currentFloor) {
+        this.currentFloor = currentFloor;
+        this.direction = Direction.WAITING;
+        this.placesLeft = MAXIMUM_CAPACITY;
+    }
+
+    public Direction getDirection() {
         return direction;
     }
 
-    public void setDirection(String direction) {
+    public void setDirection(Direction direction) {
         this.direction = direction;
     }
 
@@ -56,16 +66,12 @@ public class Elevator {
         this.currentFloor = currentFloor;
     }
 
-    public int getNearestStop() {
-        return nearestStop;
-    }
-
-    public void setNearestStop(int nearestStop) {
-        this.nearestStop = nearestStop;
-    }
-
     public List<Passenger> getPassengersInElevator() {
         return passengersInElevator;
+    }
+
+    public Set<Integer> getFloorsWillTheElevatorGoTo() {
+        return floorsWillTheElevatorGoTo;
     }
 
     @Override
@@ -75,7 +81,7 @@ public class Elevator {
                 "\nPlacesLeft " + this.placesLeft +
                 "\nPassengersInElevator: " + this.passengersInElevator +
                 "\nSize: " + this.passengersInElevator.size() +
-                "\nHeadingTowards: " + this.headingTowards +
+                "\nHeadingTowards: " + this.floorsWillTheElevatorGoTo +
                 "\nDirection: " + this.direction;
     }
 }

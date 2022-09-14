@@ -1,17 +1,19 @@
 package com.example.models;
 
+import com.example.enums.Direction;
+
 import java.util.Comparator;
 
 public class Passenger implements Comparator<Passenger> {
     private int desiredFloor;
     private int currentFloor;
 
-    private String direction;
+    private Direction direction;
 
     public Passenger() {
     }
 
-    public Passenger(int desiredFloor, int currentFloor, String direction) {
+    public Passenger(int desiredFloor, int currentFloor, Direction direction) {
         this.desiredFloor = desiredFloor;
         this.currentFloor = currentFloor;
         this.direction = direction;
@@ -37,11 +39,11 @@ public class Passenger implements Comparator<Passenger> {
         this.currentFloor = currentFloor;
     }
 
-    public String getDirection() {
+    public Direction getDirection() {
         return direction;
     }
 
-    public void setDirection(String direction) {
+    public void setDirection(Direction direction) {
         this.direction = direction;
     }
 

@@ -18,6 +18,11 @@ public class Floor {
         this.number = number;
     }
 
+    public Floor(List<Passenger> passengers, int number) {
+        this.passengers = passengers;
+        this.number = number;
+    }
+
     public int getNumberOfPassengers() {
         return numberOfPassengers;
     }

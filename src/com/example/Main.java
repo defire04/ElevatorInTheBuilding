@@ -7,18 +7,32 @@ import com.example.generators.Random;
 import com.example.models.Floor;
 import com.example.models.Passenger;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        List<Floor> a = FloorGenerator.create();
+//        List<Floor> a = FloorGenerator.create();
+//
+//        a.forEach(System.out::println);
+//        System.out.println("=========================");
+//        ElevatorController.operation(a);
 
-        a.forEach(System.out::println);
+
+        List<Floor> b = new ArrayList<>();
+
+
+        b.add(new Floor(PassengerGenerator.create(4, 1, 1), 1));
+        b.add(new Floor(PassengerGenerator.create(4, 1, 2), 2));
+        b.add(new Floor(PassengerGenerator.create(4, 1, 3), 3));
+        b.add(new Floor(PassengerGenerator.create(4, 1, 4), 4));
+
+
+        b.forEach(System.out::println);
         System.out.println("=========================");
-        ElevatorController.operation(a);
 
-
+        ElevatorController.operation(b);
 
 
 //        System.out.println(a.size());
