@@ -40,6 +40,14 @@ public class PassengerGenerator {
     public static void overrideDesiredFloor(Passenger passenger, int currentFloor, int maxFloor) {
         passenger.setCurrentFloor(currentFloor);
         int desiredFloor = Random.desiredAndCurrentFloor(maxFloor);
+
+
+        while (desiredFloor == currentFloor) {
+            desiredFloor = Random.desiredAndCurrentFloor(maxFloor);
+        }
+
+
+
         passenger.setDesiredFloor(desiredFloor);
         if (currentFloor == 1) {
             passenger.setDirection(Direction.UP);

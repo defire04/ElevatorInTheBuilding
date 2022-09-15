@@ -18,12 +18,13 @@ public class ElevatorController {
 
         while (true) {
 
-            System.out.println(elevator.getCurrentFloor());
-            System.out.println(elevator.getDirection());
+            Floor currentFloor;
 
-            Floor currentFloor = building.get(elevator.getCurrentFloor() - 1);
-
-
+            if (elevator.getCurrentFloor() == 0) {
+                currentFloor = building.get(1);
+            } else {
+                currentFloor = building.get(elevator.getCurrentFloor() - 1);
+            }
 
 //            System.out.println("------------================================= Step " + (step) + "=================================------------ ");
 //            System.out.println(currentFloor);
@@ -31,12 +32,17 @@ public class ElevatorController {
             PrintElevatorInfo.print(building, elevator);
 
             if (elevator.getDirection() == Direction.WAITING) {
-                findDirection(currentFloor, elevator);
 
-                if (building.stream().anyMatch(floor -> !(floor.getPassengers().isEmpty()))) {
-                    elevator.setCurrentFloor(building.stream().filter(floor -> !(floor.getPassengers().isEmpty())).toList().get(0).getNumber());
+                if (!elevator.getPassengersInElevator().isEmpty()) {
+                    findDirection(elevator);
+                } else if (!currentFloor.getPassengers().isEmpty()) {
+                    findDirection(currentFloor, elevator);
                 } else {
-                    return;
+                    if (building.stream().anyMatch(floor -> !(floor.getPassengers().isEmpty()))) {
+                        elevator.setCurrentFloor(building.stream().filter(floor -> !(floor.getPassengers().isEmpty())).toList().get(0).getNumber());
+                    } else {
+                        return;
+                    }
                 }
             }
 
@@ -49,7 +55,7 @@ public class ElevatorController {
             }
 
             if (elevator.getPassengersInElevator().stream().anyMatch(p -> p.getDesiredFloor() == currentFloor.getNumber())) {
-                unloadingPassengerFromTheElevator(currentFloor, elevator, building.size());
+                unloadingPassengerFromTheElevator(currentFloor, elevator, building.size() - 1);
 
             }
 
@@ -63,6 +69,7 @@ public class ElevatorController {
 
 
             goInTheDirection(elevator);
+
         }
     }
 
@@ -74,9 +81,10 @@ public class ElevatorController {
             if (passenger.getDesiredFloor() == currentFloor.getNumber()) {
                 removeList.add(passenger);
 
-
-//                currentFloor.getPassengers().add(passenger);  // для выполнения условия задание что людям которые прибыли на этаж переопределить желаемый этаж
+// для выполнения условия задание что людям которые прибыли на этаж переопределить желаемый этаж
 //                PassengerGenerator.overrideDesiredFloor(passenger, currentFloor.getNumber(), maxFloor);
+//                currentFloor.getPassengers().add(passenger);
+
             }
         }
 
@@ -92,6 +100,7 @@ public class ElevatorController {
     }
 
     private static void goInTheDirection(Elevator elevator) {
+
         if (elevator.getDirection() == Direction.UP) {
             elevator.setCurrentFloor(elevator.getCurrentFloor() + 1);
         } else if (elevator.getDirection() == Direction.DOWN) {
@@ -119,7 +128,12 @@ public class ElevatorController {
         elevator.setPlacesLeft(Elevator.MAXIMUM_CAPACITY - elevator.getPassengersInElevator().size());
     }
 
-    private static void findDirection(Floor currentFloor, Elevator elevator) {// выбор направления
+    private static void findDirection(Elevator elevator) {
+        Direction direction = elevator.getPassengersInElevator().get(0).getDirection();
+        elevator.setDirection(direction);
+    }
+
+    private static void findDirection(Floor currentFloor, Elevator elevator) {// выбор направления по этажу
 
         Map<Direction, Long> hashMap = currentFloor.getPassengers()
                 .stream()
