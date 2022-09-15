@@ -13,11 +13,11 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        List<Floor> a = FloorGenerator.create();
+        List<Floor> building = FloorGenerator.create();
 
-        a.forEach(System.out::println);
+        building.forEach(System.out::println);
         System.out.println("=========================");
-        ElevatorController.operation(a);
+        ElevatorController.operation(building);
 
 
 
